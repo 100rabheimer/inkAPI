@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/logo.svg" alt="InkAPI logo" width="420" />
+  <img src=""C:\Users\shaur\Downloads\logo.svg"" alt="InkAPI logo" width="420" />
 </p>
 
 <h3 align="center">Blog Backend with Redis Caching & Test Suite (2026)</h3>
