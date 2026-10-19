@@ -1,5 +1,8 @@
 <p align="center">
+    <a href="https://inkapi-nkj1.onrender.com/">
+
   <img src="logo.svg" alt="InkAPI logo" width="420" />
+  </a>
 </p>
 
 <h3 align="center">Blog Backend with Redis Caching & Test Suite (2026)</h3>
@@ -544,6 +547,17 @@ The API can be deployed on Render.
   &nbsp;+&nbsp;
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg" alt="Redis" width="32" height="32" />
 </p>
+
+### 🌐 Live API
+
+**Base URL:**  
+https://inkapi-nkj1.onrender.com/
+
+Example:
+
+```http
+GET https://inkapi-nkj1.onrender.com/api/posts?page=1&limit=10
+
 
 Required production environment variables:
 
