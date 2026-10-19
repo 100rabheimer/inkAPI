@@ -634,12 +634,22 @@ Tests provide regression protection when authentication, caching, authorization 
 
 # 📌 Highlights
 
-> **Engineered a blog platform API with Redis cache-aside caching, reducing list-endpoint latency from 671ms to 36ms (~95%) and detail-endpoint latency from 3.71s to 40ms (~99%); implemented offset pagination, DB-enforced constraints, and a 15-test Jest/Supertest suite.**
+> **Engineered a blog platform API with Redis cache-aside caching, reducing list-endpoint latency from 671ms to 36ms (~95%) and detail-endpoint latency from 3.71s to 40ms (~99%); implemented offset pagination, DB-enforced constraints, and a 15-test Jest/Supertest suite. Live production deployment on Render with verified Redis caching**
+> 
+
 
 ---
 
 ## 👨‍💻 Project
 
 **InkAPI — Blog Backend with Redis Caching & Test Suite (2026)**
+## 🌐 Live Demo
+
+**API:** https://inkapi-nkj1.onrender.com/
+
+**Example endpoint:**
+
+```http
+GET /api/posts?page=1&limit=10
 
 Built to demonstrate practical backend engineering across API design, authentication, PostgreSQL, Redis caching, security, testing and deployment.
