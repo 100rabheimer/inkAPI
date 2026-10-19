@@ -1,23 +1,30 @@
-# InkAPI
+<p align="center">
+  <img src="./assets/logo.svg" alt="InkAPI logo" width="420" />
+</p>
 
-### Blog Backend with Redis Caching & Test Suite (2026)
-
-A production-oriented REST API for a blogging platform built with **Node.js, Express, PostgreSQL, Redis, JWT, Jest and Supertest**.
-
-The project focuses on backend fundamentals that matter in real applications: authentication, authorization, relational data modeling, pagination, caching, cache invalidation, database constraints, rate limiting, and automated API testing.
+<h3 align="center">Blog Backend with Redis Caching & Test Suite (2026)</h3>
 
 <p align="center">
-
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
-![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
-![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)
-![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
-![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white)
-![Supertest](https://img.shields.io/badge/Supertest-333333?style=for-the-badge)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-
+A production-oriented REST API for a blogging platform built with <b>Node.js, Express, PostgreSQL, Redis, JWT, Jest and Supertest</b>.
 </p>
+
+<p align="center">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js" width="48" height="48" />
+  &nbsp;&nbsp;
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" alt="Express" width="48" height="48" />
+  &nbsp;&nbsp;
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" width="48" height="48" />
+  &nbsp;&nbsp;
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg" alt="Redis" width="48" height="48" />
+  &nbsp;&nbsp;
+  <img src="https://cdn.simpleicons.org/jsonwebtokens/D63AFF" alt="JWT" width="48" height="48" />
+  &nbsp;&nbsp;
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jest/jest-plain.svg" alt="Jest" width="48" height="48" />
+  &nbsp;&nbsp;
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" width="48" height="48" />
+</p>
+
+The project focuses on backend fundamentals that matter in real applications: authentication, authorization, relational data modeling, pagination, caching, cache invalidation, database constraints, rate limiting, and automated API testing.
 
 ---
 
@@ -42,21 +49,69 @@ The project focuses on backend fundamentals that matter in real applications: au
 
 ## 🧰 Tech Stack
 
-| Technology | Role |
-|---|---|
-| Node.js | JavaScript runtime |
-| Express.js | REST API framework |
-| PostgreSQL | Primary relational database |
-| Neon | Hosted PostgreSQL |
-| Redis | Caching |
-| ioredis | Redis client |
-| JWT | Authentication |
-| bcrypt | Password hashing |
-| Jest | Test runner |
-| Supertest | HTTP/API testing |
-| Helmet | Security headers |
-| express-rate-limit | Rate limiting |
-| dotenv | Environment configuration |
+<table align="center">
+  <tr>
+    <td align="center" width="120">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" width="52" height="52" alt="Node.js" /><br />
+      <sub><b>Node.js</b></sub><br />
+      <sub>Runtime</sub>
+    </td>
+    <td align="center" width="120">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" width="52" height="52" alt="Express.js" /><br />
+      <sub><b>Express.js</b></sub><br />
+      <sub>REST framework</sub>
+    </td>
+    <td align="center" width="120">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" width="52" height="52" alt="PostgreSQL" /><br />
+      <sub><b>PostgreSQL</b></sub><br />
+      <sub>Primary database</sub>
+    </td>
+    <td align="center" width="120">
+      <img src="https://cdn.simpleicons.org/neon/00E599" width="52" height="52" alt="Neon" /><br />
+      <sub><b>Neon</b></sub><br />
+      <sub>Hosted Postgres</sub>
+    </td>
+    <td align="center" width="120">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg" width="52" height="52" alt="Redis" /><br />
+      <sub><b>Redis</b></sub><br />
+      <sub>Caching</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="120">
+      <img src="https://cdn.simpleicons.org/jsonwebtokens/D63AFF" width="52" height="52" alt="JWT" /><br />
+      <sub><b>JWT</b></sub><br />
+      <sub>Authentication</sub>
+    </td>
+    <td align="center" width="120">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jest/jest-plain.svg" width="52" height="52" alt="Jest" /><br />
+      <sub><b>Jest</b></sub><br />
+      <sub>Test runner</sub>
+    </td>
+    <td align="center" width="120">
+      <img src="https://img.shields.io/badge/Supertest-333333?style=for-the-badge" height="26" alt="Supertest" /><br />
+      <sub><b>Supertest</b></sub><br />
+      <sub>HTTP testing</sub>
+    </td>
+    <td align="center" width="120">
+      <img src="https://cdn.simpleicons.org/dotenv/ECD53F" width="52" height="52" alt="dotenv" /><br />
+      <sub><b>dotenv</b></sub><br />
+      <sub>Env config</sub>
+    </td>
+    <td align="center" width="120">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width="52" height="52" alt="JavaScript" /><br />
+      <sub><b>JavaScript</b></sub><br />
+      <sub>Language</sub>
+    </td>
+  </tr>
+</table>
+
+**Libraries without an official logo:**
+
+![ioredis](https://img.shields.io/badge/ioredis-DC382D?style=flat-square&logo=redis&logoColor=white)
+![bcrypt](https://img.shields.io/badge/bcrypt-004E89?style=flat-square&logo=letsencrypt&logoColor=white)
+![Helmet](https://img.shields.io/badge/Helmet-000000?style=flat-square&logo=hackthebox&logoColor=white)
+![express-rate-limit](https://img.shields.io/badge/express--rate--limit-000000?style=flat-square&logo=express&logoColor=white)
 
 ---
 
@@ -94,6 +149,9 @@ The project focuses on backend fundamentals that matter in real applications: au
 
 ```text
 inkAPI/
+│
+├── assets/
+│   └── logo.svg
 │
 ├── src/
 │   ├── config/
@@ -476,6 +534,16 @@ The API runs on the configured `PORT`.
 # ☁️ Deployment
 
 The API can be deployed on Render.
+
+<p>
+  <img src="https://cdn.simpleicons.org/github/181717" alt="GitHub" width="32" height="32" />
+  &nbsp;→&nbsp;
+  <img src="https://cdn.simpleicons.org/render/46E3B7" alt="Render" width="32" height="32" />
+  &nbsp;→&nbsp;
+  <img src="https://cdn.simpleicons.org/neon/00E599" alt="Neon" width="32" height="32" />
+  &nbsp;+&nbsp;
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg" alt="Redis" width="32" height="32" />
+</p>
 
 Required production environment variables:
 
