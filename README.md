@@ -106,7 +106,7 @@ The project focuses on backend fundamentals that matter in real applications: au
   </tr>
 </table>
 
-**Libraries without an official logo:**
+**Libraries**
 
 ![ioredis](https://img.shields.io/badge/ioredis-DC382D?style=flat-square&logo=redis&logoColor=white)
 ![bcrypt](https://img.shields.io/badge/bcrypt-004E89?style=flat-square&logo=letsencrypt&logoColor=white)
