@@ -20,3 +20,9 @@ Thumbs.db
 # Optional
 dist/
 coverage/
+.env
+.env.test
+
+.env
+.env.test
+node_modules/

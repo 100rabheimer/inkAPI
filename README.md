@@ -1,215 +1,563 @@
-# AuthKit
+# InkAPI
+
+### Blog Backend with Redis Caching & Test Suite (2026)
+
+A production-oriented REST API for a blogging platform built with **Node.js, Express, PostgreSQL, Redis, JWT, Jest and Supertest**.
+
+The project focuses on backend fundamentals that matter in real applications: authentication, authorization, relational data modeling, pagination, caching, cache invalidation, database constraints, rate limiting, and automated API testing.
 
 <p align="center">
-  <img src="https://img.shields.io/badge/AuthKit-Authentication%20Service-blueviolet?style=for-the-badge" alt="AuthKit" />
-</p>
 
-<p align="center">
-  Production-style Authentication Service with JWT Access + Refresh Tokens, Token Rotation, and Redis Rate Limiting.
-</p>
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
+![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white)
+![Supertest](https://img.shields.io/badge/Supertest-333333?style=for-the-badge)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
-  <img src="https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express" />
-  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
-  <img src="https://img.shields.io/badge/Neon-00E699?style=for-the-badge&logo=neon&logoColor=black" alt="Neon" />
-  <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white" alt="Redis" />
-  <img src="https://img.shields.io/badge/Upstash-00E9A3?style=for-the-badge&logo=upstash&logoColor=black" alt="Upstash" />
-  <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT" />
-  <img src="https://img.shields.io/badge/bcrypt-338b11?style=for-the-badge&logo=letsencrypt&logoColor=white" alt="bcrypt" />
 </p>
 
 ---
 
-## Features
+## ✨ Highlights
 
-- User Signup & Login
-- JWT Access Token (15 minutes)
-- Refresh Token (7 days) in httpOnly cookie
-- Token Rotation + Reuse Detection (revokes all sessions on theft)
-- Timing-safe password comparison
-- bcrypt password hashing (12 rounds)
-- Rate limiting (5 attempts / 15 min) with Redis
-- Protected routes with authentication middleware
-- Input validation
-- Secure cookie handling (httpOnly, SameSite)
-
----
-
-## Tech Stack
-
-| Layer              | Technology                          |
-|--------------------|-------------------------------------|
-| Runtime            | Node.js                             |
-| Framework          | Express.js                          |
-| Database           | PostgreSQL (Neon)                   |
-| Cache / Rate Limit | Redis (Upstash)                     |
-| Auth               | jsonwebtoken + bcrypt               |
-| Security           | helmet, cors, cookie-parser         |
+- JWT access and refresh-token authentication
+- Secure password hashing with bcrypt
+- Protected routes and author-based authorization
+- Blog posts, comments and likes
+- Database-enforced unique likes
+- Offset pagination with `page` and `limit`
+- Redis cache-aside strategy
+- Cache invalidation on data changes
+- `X-Cache: HIT/MISS` response header
+- Request validation and rate limiting
+- PostgreSQL with foreign keys and cascading deletes
+- Separate test database
+- **15 automated API tests** with Jest + Supertest
+- Ready for deployment with environment variables
 
 ---
 
-## Project Structure
+## 🧰 Tech Stack
+
+| Technology | Role |
+|---|---|
+| Node.js | JavaScript runtime |
+| Express.js | REST API framework |
+| PostgreSQL | Primary relational database |
+| Neon | Hosted PostgreSQL |
+| Redis | Caching |
+| ioredis | Redis client |
+| JWT | Authentication |
+| bcrypt | Password hashing |
+| Jest | Test runner |
+| Supertest | HTTP/API testing |
+| Helmet | Security headers |
+| express-rate-limit | Rate limiting |
+| dotenv | Environment configuration |
+
+---
+
+## 🏛️ Architecture
 
 ```text
-auth-service/
+                         Client
+                           │
+                           ▼
+                    ┌─────────────┐
+                    │   Express   │
+                    │     API     │
+                    └──────┬──────┘
+                           │
+              ┌────────────┼────────────┐
+              │            │            │
+              ▼            ▼            ▼
+         Middleware      Routes     Controllers
+              │                         │
+      ┌───────┼────────┐                │
+      │       │        │                │
+     JWT   Validation  Rate             ▼
+     Auth              Limit       Business Logic
+                                      │
+                              ┌───────┴───────┐
+                              │               │
+                              ▼               ▼
+                           Redis         PostgreSQL
+                           Cache           Database
+```
+
+---
+
+## 📁 Project Structure
+
+```text
+inkAPI/
+│
 ├── src/
 │   ├── config/
-│   │   ├── db.js                 # PostgreSQL (Neon) connection
-│   │   └── index.js              # Environment config
+│   │   ├── db.js
+│   │   ├── index.js
+│   │   └── redis.js
+│   │
 │   ├── controllers/
-│   │   └── auth.controller.js    # signup, login, refresh, logout, me
+│   │   ├── auth.controller.js
+│   │   └── post.controller.js
+│   │
 │   ├── middleware/
-│   │   ├── auth.js               # JWT verification
-│   │   ├── rateLimiter.js        # Redis rate limiting
-│   │   ├── validate.js           # Input validation
-│   │   └── errorHandler.js       # Central error handler
+│   │   ├── auth.js
+│   │   ├── errorHandler.js
+│   │   ├── rateLimiter.js
+│   │   └── validate.js
+│   │
 │   ├── routes/
-│   │   └── auth.routes.js        # All /api/auth/* routes
+│   │   ├── auth.routes.js
+│   │   └── post.routes.js
+│   │
+│   ├── tests/
+│   │   ├── auth.test.js
+│   │   └── post.test.js
+│   │
 │   ├── utils/
-│   │   ├── password.js           # bcrypt hash & compare
-│   │   └── tokens.js             # Access + Refresh token helpers
-│   ├── app.js                    # Express app setup
-│   └── server.js                 # Server entry point
+│   │   ├── password.js
+│   │   └── tokens.js
+│   │
+│   ├── app.js
+│   ├── server.js
+│   ├── check-cache.js
+│   └── clear-cache.js
+│
+├── tests/
+│   └── setup.js
+│
 ├── .env.example
 ├── .gitignore
+├── jest.config.js
 ├── package.json
+├── package-lock.json
 └── README.md
 ```
 
+### Directory responsibilities
+
+- `config/` — PostgreSQL and Redis configuration
+- `controllers/` — request handling and application logic
+- `middleware/` — authentication, validation, rate limiting and errors
+- `routes/` — API route definitions
+- `utils/` — reusable password and token helpers
+- `src/tests/` — automated API tests
+- `tests/` — Jest environment setup
+- `app.js` — Express application configuration
+- `server.js` — application entry point
+
 ---
 
-## Setup
+# 🔐 Authentication
 
-### 1. Clone the repository
+InkAPI uses JWT-based authentication.
 
-```bash
-git clone <your-repo-url>
-cd auth-service
+Protected requests use:
+
+```http
+Authorization: Bearer <access_token>
 ```
 
-### 2. Install dependencies
+Authentication includes:
+
+- User signup
+- Login
+- Access tokens
+- Refresh tokens
+- Refresh-token rotation
+- Logout / token revocation
+- Protected endpoints
+- Author-based authorization
+- bcrypt password hashing
+
+---
+
+# 📝 Blog API
+
+## Posts
+
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| `POST` | `/api/posts` | Create a post | Required |
+| `GET` | `/api/posts?page=1&limit=10` | Get paginated posts | Public |
+| `GET` | `/api/posts/:id` | Get post with comments | Public |
+| `DELETE` | `/api/posts/:id` | Delete a post | Author only |
+
+## Comments
+
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| `POST` | `/api/posts/:id/comments` | Add a comment | Required |
+
+## Likes
+
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| `POST` | `/api/posts/:id/like` | Like a post | Required |
+
+A user can like a post only once. PostgreSQL enforces this with a composite primary key:
+
+```sql
+PRIMARY KEY (user_id, post_id)
+```
+
+A duplicate like returns:
+
+```http
+409 Conflict
+```
+
+---
+
+# 📄 Pagination
+
+The post listing endpoint uses **offset pagination**:
+
+```http
+GET /api/posts?page=1&limit=10
+```
+
+Example:
+
+```text
+page=1  → first page
+limit=10 → 10 posts
+```
+
+Posts are returned newest first using `created_at`.
+
+---
+
+# ⚡ Redis Caching
+
+InkAPI implements the **cache-aside pattern** for frequently requested post data.
+
+### Read flow
+
+```text
+GET /api/posts
+       │
+       ▼
+   Check Redis
+       │
+   ┌───┴────┐
+   │        │
+  HIT      MISS
+   │        │
+   ▼        ▼
+Return   PostgreSQL
+cache       │
+            ▼
+       Store in Redis
+            │
+            ▼
+         Response
+```
+
+### Cache keys
+
+```text
+posts:page:{page}:limit:{limit}
+post:{postId}
+```
+
+### TTL
+
+```text
+Post list:    60 seconds
+Post detail:  300 seconds
+```
+
+### Cache invalidation
+
+Relevant cached data is invalidated after mutations such as:
+
+- Creating a post
+- Adding a comment
+- Adding a like
+- Deleting a post
+
+The API exposes:
+
+```http
+X-Cache: HIT
+```
+
+or:
+
+```http
+X-Cache: MISS
+```
+
+so cache behavior can be observed directly.
+
+---
+
+# 📊 Performance
+
+Local development measurements using Postman:
+
+| Endpoint | Cache MISS | Cache HIT |
+|---|---:|---:|
+| Post list | 671 ms | 36 ms |
+| Post detail | 3.71 s | 40 ms |
+
+Approximate reduction:
+
+- Post list: **~95%**
+- Post detail: **~99%**
+
+> These are local development measurements and can vary depending on database, Redis, network and machine conditions.
+
+---
+
+# 🗄️ Database Design
+
+The application uses PostgreSQL with relational constraints.
+
+```text
+users
+  │
+  ├────────────── posts
+  │                 │
+  │                 └──────── comments
+  │
+  └────────────── likes
+```
+
+### Important constraints
+
+- UUID primary keys
+- Foreign keys
+- `NOT NULL` constraints
+- Unique user emails
+- Composite primary key for likes
+- `ON DELETE CASCADE` for comments and likes
+- Author ownership checks at the application layer
+
+This combination keeps data integrity enforced by both the application and the database.
+
+---
+
+# 🧪 Testing
+
+InkAPI includes **15 automated tests** using Jest and Supertest.
+
+### Test areas
+
+**Authentication**
+
+- Signup
+- Duplicate email
+- Input validation
+- Login
+- Invalid password
+- Protected `/me`
+- Invalid access token
+- Refresh token
+- Logout
+
+**Blog API**
+
+- Create post with valid token
+- Reject post creation without token
+- Pagination page size and ordering
+- Duplicate like prevention
+- Author-only deletion
+- Cache invalidation after post creation
+
+### Run tests
+
+```bash
+npm test
+```
+
+Run only post tests:
+
+```bash
+npm test -- src/tests/post.test.js
+```
+
+Tests use a **separate test database** so automated tests do not operate on development data.
+
+---
+
+# 🔒 Security
+
+The API includes several security practices:
+
+- bcrypt password hashing
+- JWT authentication
+- Refresh-token management
+- Protected routes
+- Author-only resource deletion
+- Helmet security headers
+- CORS configuration
+- Rate limiting
+- Environment-based secrets
+- Database constraints
+- Separate test database
+
+---
+
+# ⚙️ Environment Variables
+
+Create a local `.env` file:
+
+```env
+PORT=5000
+
+DATABASE_URL=your_postgresql_connection_string
+
+REDIS_URL=your_redis_connection_string
+
+ACCESS_TOKEN_SECRET=your_access_token_secret
+
+REFRESH_TOKEN_SECRET=your_refresh_token_secret
+
+CLIENT_URL=http://localhost:3000
+```
+
+Testing uses a separate `.env.test`.
+
+> Never commit `.env` or `.env.test` to Git.
+
+---
+
+# 🚀 Getting Started
+
+## 1. Clone
+
+```bash
+git clone https://github.com/100rabheimer/inkAPI.git
+cd inkAPI
+```
+
+## 2. Install dependencies
 
 ```bash
 npm install
 ```
 
-### 3. Environment Variables
+## 3. Configure environment
 
-Copy `.env.example` to `.env` and fill in the values:
+Create `.env` using `.env.example` as a reference.
 
-```env
-PORT=5000
-NODE_ENV=development
+Configure:
 
-DATABASE_URL=your_neon_postgresql_url
-REDIS_URL=your_upstash_redis_url
+- PostgreSQL / Neon
+- Redis
+- JWT secrets
+- Client URL
 
-ACCESS_TOKEN_SECRET=your_long_random_access_secret
-REFRESH_TOKEN_SECRET=your_long_random_refresh_secret
+## 4. Start the server
 
-ACCESS_TOKEN_EXPIRY=15m
-REFRESH_TOKEN_EXPIRY=7d
-
-CLIENT_URL=http://localhost:3000
-```
-
-### 4. Create Database Tables
-
-Run this SQL in your Neon SQL Editor:
-
-```sql
-CREATE TABLE users (
-  id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  email         VARCHAR(255) UNIQUE NOT NULL,
-  password_hash VARCHAR(255) NOT NULL,
-  name          VARCHAR(100),
-  created_at    TIMESTAMPTZ DEFAULT NOW(),
-  updated_at    TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE TABLE refresh_tokens (
-  id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id       UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  token_hash    VARCHAR(255) NOT NULL,
-  expires_at    TIMESTAMPTZ NOT NULL,
-  created_at    TIMESTAMPTZ DEFAULT NOW(),
-  revoked       BOOLEAN DEFAULT FALSE
-);
-
-CREATE INDEX idx_refresh_tokens_user_id ON refresh_tokens(user_id);
-CREATE INDEX idx_refresh_tokens_token_hash ON refresh_tokens(token_hash);
-```
-
-### 5. Start the server
+Development:
 
 ```bash
-node src/server.js
+npm run dev
 ```
 
-Server runs on `http://localhost:5000`
+Production:
+
+```bash
+npm start
+```
+
+The API runs on the configured `PORT`.
 
 ---
 
-## API Endpoints
+# ☁️ Deployment
 
-| Method | Endpoint              | Description                | Auth Required     |
-|--------|-----------------------|----------------------------|-------------------|
-| POST   | `/api/auth/signup`    | Register a new user        | No                |
-| POST   | `/api/auth/login`     | Login user                 | No                |
-| POST   | `/api/auth/refresh`   | Get new access token       | Refresh Cookie    |
-| POST   | `/api/auth/logout`    | Logout & revoke token      | Refresh Cookie    |
-| GET    | `/api/auth/me`        | Get current user info      | Bearer Token      |
+The API can be deployed on Render.
 
-### Signup Example
+Required production environment variables:
 
-```http
-POST /api/auth/signup
-Content-Type: application/json
-
-{
-  "email": "user@example.com",
-  "password": "password123",
-  "name": "John Doe"
-}
+```text
+DATABASE_URL
+REDIS_URL
+ACCESS_TOKEN_SECRET
+REFRESH_TOKEN_SECRET
+CLIENT_URL
 ```
 
-### Login Example
+Production architecture:
 
-```http
-POST /api/auth/login
-Content-Type: application/json
-
-{
-  "email": "user@example.com",
-  "password": "password123"
-}
+```text
+                    GitHub
+                       │
+                       ▼
+                    Render
+                   /      \
+                  /        \
+                 ▼          ▼
+             PostgreSQL    Redis
+               Neon
 ```
 
-### Protected Route Example
+After deployment, cache behavior can be verified by calling the same GET endpoint twice and checking:
 
 ```http
-GET /api/auth/me
-Authorization: Bearer <access_token>
+X-Cache: MISS
+```
+
+followed by:
+
+```http
+X-Cache: HIT
 ```
 
 ---
 
-## Security Highlights
+# 🧠 Engineering Decisions
 
-- Access tokens are short-lived (15 minutes)
-- Refresh tokens stored as **SHA-256 hash** in database
-- Token rotation on every refresh
-- **Reuse detection** → revokes all sessions if a stolen token is used
-- Timing-safe password comparison (prevents user enumeration)
-- Rate limiting with Redis (5 attempts / 15 minutes)
-- httpOnly + SameSite cookies
-- Separate secrets for access and refresh tokens
-- bcrypt with 12 salt rounds
+### Why Redis?
+
+Frequently requested blog data can be served from memory instead of querying PostgreSQL on every request.
+
+### Why cache-aside?
+
+It keeps PostgreSQL as the source of truth while allowing frequently accessed data to be cached independently.
+
+### Why database constraints?
+
+Application checks alone are not enough for data integrity. PostgreSQL constraints provide a final layer of protection.
+
+### Why automated tests?
+
+Tests provide regression protection when authentication, caching, authorization or database logic changes.
 
 ---
 
-## License
+# 🔮 Future Improvements
 
-MIT
-```
+- Cursor-based pagination for large datasets
+- Post editing
+- Comment editing/deletion
+- Full-text search
+- Swagger/OpenAPI documentation
+- Docker
+- GitHub Actions CI/CD
+- Production monitoring
+- Structured logging
+- More granular Redis invalidation
+
+---
+
+# 📌 Highlights
+
+> **Engineered a blog platform API with Redis cache-aside caching, reducing list-endpoint latency from 671ms to 36ms (~95%) and detail-endpoint latency from 3.71s to 40ms (~99%); implemented offset pagination, DB-enforced constraints, and a 15-test Jest/Supertest suite.**
+
+---
+
+## 👨‍💻 Project
+
+**InkAPI — Blog Backend with Redis Caching & Test Suite (2026)**
+
+Built to demonstrate practical backend engineering across API design, authentication, PostgreSQL, Redis caching, security, testing and deployment.

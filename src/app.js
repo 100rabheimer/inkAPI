@@ -1,6 +1,5 @@
 // .env file se environment variables load karne ke liye
-require('dotenv').config();
-
+require('./config/redis');
 // Zaroori packages
 const express = require('express');           // Express framework
 const cors = require('cors');                 // Cross-Origin Resource Sharing (frontend se baat karne ke liye)
@@ -9,6 +8,7 @@ const helmet = require('helmet');             // Security headers lagane ke liye
 
 // Apne auth routes ko import kar rahe hain
 const authRoutes = require('./routes/auth.routes');
+const postRoutes = require('./routes/post.routes');
 
 // Express app bana rahe hain
 const app = express();
@@ -45,11 +45,13 @@ app.use('/api/auth', authRoutes);
 app.get('/', (req, res) => {
   res.json({ message: 'Auth Service is running' });
 });
+app.use("/api/posts", postRoutes);
 
 // 404 handler → agar koi galat URL pe request aaye to yeh chalega
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
+
 
 // app ko export kar rahe hain taaki server.js isko use kar sake
 module.exports = app;
